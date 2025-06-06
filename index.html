@@ -1,11 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <title>計算ツールなのだ</title>
-  <script type="module" src="script/main.js"></script>
+  <script type="module" src="./script/main.js"></script>
+  <link rel="stylesheet" href="./style/style.css">
 </head>
 <body>
-  <h1>はろ～～せか～～いボクの声はちゃんととどいてるか～～ぃ</h1>
+  <h1>計算ツールなのだ</h1>
+
+  <label for="instance-select">インスタンスを選ぶのだ：</label>
+  <select id="instance-select">
+    <option value="A">A</option>
+    <option value="B">B</option>
+  </select>
+
+  <div id="inputs">
+    <!-- 入力ボックスとラジオボタンを6個作るのだ -->
+  </div>
+
+  <button id="calculate-btn">計算するのだ！</button>
+
+  <h2>結果：<span id="result">--</span></h2>
 </body>
 </html>

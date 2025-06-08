@@ -1,4 +1,10 @@
-import { Score } from './instance.js';
+import { A } from './instanceA.js';
+import { B } from './instanceB.js';
+
+const instances = {
+  A,
+  B
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   const inputArea = document.getElementById('inputs');
@@ -6,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultDisplay = document.getElementById('result');
   const instanceSelect = document.getElementById('instance-select');
 
-  // 入力6個とラジオボタンを生成するのだ
   const inputCount = 6;
   const radioName = 'selector';
 
@@ -29,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   calculateBtn.addEventListener('click', () => {
-    const selectedInstance = instanceSelect.value;
-    const instance = new Score(selectedInstance);
+    const selectedKey = instanceSelect.value;
+    const instance = instances[selectedKey];
 
     const values = [];
     for (let i = 0; i < inputCount; i++) {
@@ -43,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('どれか1つラジオボタンを選んでほしいのだ！');
       return;
     }
+
     const selectedIndex = parseInt(selectedRadio.value);
     const selectedValue = values[selectedIndex];
 

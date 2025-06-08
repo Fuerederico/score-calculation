@@ -1,4 +1,7 @@
-import arrayData from './A_array.json';
 import { Score } from './Score.js';
 
-export const instanceA = new Score("A", 22, 544, arrayData);
+export async function loadInstanceA() {
+  const response = await fetch('./A_array.json');
+  const arrayData = await response.json();
+  return new Score("A", 22, 544, arrayData);
+}

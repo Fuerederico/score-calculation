@@ -1,9 +1,9 @@
 import { A } from './instanceA.js';
-import { B } from './instanceB.js';
+//import { B } from './instanceB.js';
 
 const instances = {
-  A,
-  B
+  A//,
+  //B
 };
 
 document.addEventListener('DOMContentLoaded', () => {

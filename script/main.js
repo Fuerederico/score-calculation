@@ -1,3 +1,8 @@
+//エラーメッセージ表示
+window.onerror = function(message, source, lineno, colno, error) {
+  alert(`Error: ${message}\nSource: ${source}\nLine: ${lineno}, Column: ${colno}`);
+};
+
 import { loadInstanceA } from './instanceA.js';
 
 let instances = [];

@@ -1,58 +1,46 @@
-import { Score } from "./Score.js";
-import { instanceA } from "./instanceA.js";
+import { loadInstanceA } from './instanceA.js';
 
-let instances = [instanceA];
+let instances = [];
 
-const instanceSelect = document.getElementById("instance-select");
-const inputsContainer = document.getElementById("inputs-container");
-const calculateBtn = document.getElementById("calculate-btn");
-const result1 = document.getElementById("result1");
-const result2 = document.getElementById("result2");
+document.addEventListener("DOMContentLoaded", async () => {
+  const instanceA = await loadInstanceA();
+  instances.push(instanceA);
 
-// インスタンスをセレクトボックスに追加
-instances.forEach(inst => {
-  const option = document.createElement("option");
-  option.value = inst.name;
-  option.textContent = inst.name;
-  instanceSelect.appendChild(option);
+  populateDropdown(instances);
+  setupEventListeners(instances);
 });
 
-function createInputs() {
-  inputsContainer.innerHTML = "";
-  for (let i = 0; i < 6; i++) {
-    const div = document.createElement("div");
-    const input = document.createElement("input");
-    input.type = "number";
-    input.className = "input-box";
-    input.dataset.index = i;
-
-    div.appendChild(input);
-    if (i > 0) {
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = "selected";
-      radio.value = i;
-      div.appendChild(radio);
-    }
-    inputsContainer.appendChild(div);
-  }
+function populateDropdown(instances) {
+  const select = document.getElementById("scoreSelect");
+  instances.forEach((instance, index) => {
+    const option = document.createElement("option");
+    option.value = index;
+    option.textContent = instance.name;
+    select.appendChild(option);
+  });
 }
 
-createInputs();
+function setupEventListeners(instances) {
+  document.getElementById("calculateBtn").addEventListener("click", () => {
+    const selectedIndex = document.getElementById("scoreSelect").value;
+    const instance = instances[selectedIndex];
 
-calculateBtn.addEventListener("click", () => {
-  const selectedName = instanceSelect.value;
-  const instance = instances.find(i => i.name === selectedName);
-  const inputs = document.querySelectorAll(".input-box");
-  const radios = document.querySelectorAll("input[type=radio][name=selected]");
+    const inputs = [...document.querySelectorAll(".input-box")].map(input => Number(input.value));
+    const radios = [...document.querySelectorAll("input[name='radioGroup']")];
+    const selectedRadio = radios.find((r, i) => r.checked && i > 0); // 最初の入力はラジオなし
 
-  const values = Array.from(inputs).map(input => Number(input.value));
-  const selectedRadio = Array.from(radios).find(r => r.checked);
-  const selectedValue = selectedRadio ? values[selectedRadio.value] : 0;
+    if (!selectedRadio) {
+      alert("ラジオボタンを1つ選択してくださいなのだ。");
+      return;
+    }
 
-  const total = values.reduce((sum, v) => sum + v, 0);
+    const selectedIndexRadio = radios.findIndex((r, i) => r.checked && i > 0);
+    const selectedValue = inputs[selectedIndexRadio];
 
-  const output = instance.calculate(total, selectedValue);
-  result1.textContent = `計算結果: ${output.toFixed(2)}`;
-  result2.textContent = `インスタンス: ${instance.name}, level: ${instance.level}`;
-});
+    const total = inputs.reduce((a, b) => a + b, 0);
+    const result = instance.calculate(total, selectedValue);
+
+    document.getElementById("output1").textContent = `結果: ${result}`;
+    document.getElementById("output2").textContent = `選択値: ${selectedValue}`;
+  });
+}

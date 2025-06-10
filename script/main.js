@@ -5,17 +5,17 @@ window.onerror = function(message, source, lineno, colno, error) {
 
 import { loadInstanceA } from './instanceA.js';
 
-let instances = [];
+const instances = [];
 
-document.addEventListener("DOMContentLoaded", async () => {
+async function initialize() {
   const instanceA = await loadInstanceA();
   instances.push(instanceA);
 
-  populateDropdown(instances);
-  setupEventListeners(instances);
-});
+  populateDropdown();
+  setupEventListeners();
+}
 
-function populateDropdown(instances) {
+function populateDropdown() {
   const select = document.getElementById("instance-select");
   instances.forEach((instance, index) => {
     const option = document.createElement("option");
@@ -25,27 +25,44 @@ function populateDropdown(instances) {
   });
 }
 
-function setupEventListeners(instances) {
-  document.getElementById("calculateBtn").addEventListener("click", () => {
-    const selectedIndex = document.getElementById("scoreSelect").value;
+function setupEventListeners() {
+  const calculateBtn = document.getElementById("calculate-btn");
+  calculateBtn.addEventListener("click", () => {
+    const select = document.getElementById("instance-select");
+    const selectedIndex = select.value;
     const instance = instances[selectedIndex];
 
-    const inputs = [...document.querySelectorAll(".input-box")].map(input => Number(input.value));
-    const radios = [...document.querySelectorAll("input[name='radioGroup']")];
-    const selectedRadio = radios.find((r, i) => r.checked && i > 0); // 最初の入力はラジオなし
-
-    if (!selectedRadio) {
-      alert("ラジオボタンを1つ選択してくださいなのだ。");
-      return;
+    const inputValues = [];
+    for (let i = 0; i < 6; i++) {
+      const val = Number(document.getElementById(`input-${i}`).value) || 0;
+      inputValues.push(val);
     }
 
-    const selectedIndexRadio = radios.findIndex((r, i) => r.checked && i > 0);
-    const selectedValue = inputs[selectedIndexRadio];
+    const selectedRadio = document.querySelector('input[name="selection"]:checked');
+    const selectedValue = selectedRadio ? Number(selectedRadio.value) : 0;
 
-    const total = inputs.reduce((a, b) => a + b, 0);
-    const result = instance.calculate(total, selectedValue);
-
-    document.getElementById("output1").textContent = `結果: ${result}`;
-    document.getElementById("output2").textContent = `選択値: ${selectedValue}`;
+    const result = instance.calculate(inputValues, selectedValue);
+    document.getElementById("result").textContent = result.toFixed(2);
   });
+
+  const inputsDiv = document.getElementById("inputs");
+  for (let i = 0; i < 6; i++) {
+    const input = document.createElement("input");
+    input.type = "number";
+    input.id = `input-${i}`;
+    input.placeholder = `入力${i + 1}`;
+    inputsDiv.appendChild(input);
+
+    if (i > 0) {
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = "selection";
+      radio.value = i;
+      inputsDiv.appendChild(radio);
+    }
+
+    inputsDiv.appendChild(document.createElement("br"));
+  }
 }
+
+initialize();

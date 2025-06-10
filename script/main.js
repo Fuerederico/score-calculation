@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function populateDropdown(instances) {
-  const select = document.getElementById("scoreSelect");
+  const select = document.getElementById("instance-select");
   instances.forEach((instance, index) => {
     const option = document.createElement("option");
     option.value = index;

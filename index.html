@@ -1,23 +1,12 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!DOCTYPE html><html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <title>Score Calculator</title>
+  <meta charset="UTF-8">
+  <title>スコア計算ツール</title>
 </head>
 <body>
-  <h1>スコア計算機なのだ</h1>
+  <h1>スコア計算ツールなのだ</h1><label for="instance-select">インスタンス選択:</label> <select id="instance-select"> <option value="A">A</option> <option value="B">B</option> </select>
 
-  <label for="instance-select">インスタンス選択：</label>
-  <select id="instance-select"></select>
+  <div id="inputs"></div><button id="calculate-btn">計算するのだ！</button>
 
-  <div id="inputs-container"></div>
-
-  <button id="calculate-btn">計算</button>
-
-  <div id="result1"></div>
-  <div id="result2"></div>
-
- <script type="module" src="./script/main.js" defer></script>
-
-</body>
+  <p>結果: <span id="result">---</span></p>  <script type="module" src="./script/main.js" defer></script></body>
 </html>

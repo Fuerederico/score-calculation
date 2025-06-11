@@ -27,25 +27,29 @@ function populateDropdown() {
 
 function setupEventListeners() {
   const calculateBtn = document.getElementById("calculate-btn");
-  calculateBtn.addEventListener("click", () => {
-    const select = document.getElementById("instance-select");
-    const selectedIndex = select.value;
-    const instance = instances[selectedIndex];
+calculateBtn.addEventListener("click", () => {
+  const select = document.getElementById("instance-select");
+  const selectedIndex = select.value;
+  const instance = instances[selectedIndex];
 
-    const inputValues = [];
-    for (let i = 0; i < 6; i++) {
-      const val = Number(document.getElementById(`input-${i}`).value) || 0;
-      inputValues.push(val);
-    }
+  const inputValues = [];
+  for (let i = 0; i < 6; i++) {
+    const val = Number(document.getElementById(`input-${i}`).value) || 0;
+    inputValues.push(val);
+  }
 
-    const total = inputValues.reduce((a, b) => a + b, 0);
+  const total = inputValues.reduce((a, b) => a + b, 0);
 
-    const selectedRadio = document.querySelector('input[name="selection"]:checked');
-    const selectedValue = selectedRadio ? Number(selectedRadio.value) : 0;
+  const selectedRadio = document.querySelector('input[name="selection"]:checked');
+  let selectedValue = 0;
+  if (selectedRadio) {
+    const index = Number(selectedRadio.value); // ラジオボタンの通し番号
+    selectedValue = Number(document.getElementById(`input-${index}`).value) || 0;
+  }
 
-    const result = instance.calculate(total, selectedValue);
-    document.getElementById("result").textContent = result.toFixed(2);
-  });
+  const result = instance.calculate(total, selectedValue);
+  document.getElementById("result").textContent = result.toFixed(2);
+});
 
   const inputsDiv = document.getElementById("inputs");
   for (let i = 0; i < 6; i++) {

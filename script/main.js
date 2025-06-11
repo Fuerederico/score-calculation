@@ -38,10 +38,12 @@ function setupEventListeners() {
       inputValues.push(val);
     }
 
+    const total = inputValues.reduce((a, b) => a + b, 0);
+
     const selectedRadio = document.querySelector('input[name="selection"]:checked');
     const selectedValue = selectedRadio ? Number(selectedRadio.value) : 0;
 
-    const result = instance.calculate(inputValues, selectedValue);
+    const result = instance.calculate(total, selectedValue);
     document.getElementById("result").textContent = result.toFixed(2);
   });
 

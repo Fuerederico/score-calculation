@@ -11,19 +11,20 @@ export class Score {
     this.actskl2 = noteData.map(d => d.actskl2);
   }
 
+  /*
   calculate(total, selectedValue) {
     // 仮の計算式なのだ（あとで書き換えるのだ）
     return this.noteData.reduce((sum, d) => sum + (total + selectedValue) * d.c_bns, 0);
   }
+  */
 
-/*
   calculate(total, selectedValue) {
+    // 仮の計算式なのだ（あとで書き換えるのだ）
     let sum = 0;
-    for (let i = 0; i < this.n_count; i++) {
+    for (let i = 0; i < this.n_cnt; i++) {
       sum += (total + selectedValue) * this.c_bns[i];
     }
     return sum;
   }
-*/
 
 }

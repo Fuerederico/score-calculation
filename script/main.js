@@ -61,7 +61,7 @@ function setupEventListeners() {
     const talent = inputValues[0];
     const skill = inputValues.slice(1).concat(selectedValue);
 
-    const [result1, result2] = instance.calc_max_score(talent, skill);
+    const {result1, result2} = instance.calc_max_score(talent, skill);
     document.getElementById("result").textContent = `${result1.toFixed(2)} / ${result2.toFixed(2)}`;
   });
 

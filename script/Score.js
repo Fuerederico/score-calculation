@@ -1,4 +1,6 @@
 export class Score {
+  static weight = [1, 2, 0.1, 0.2, 0.1, 0.2, 1, 3];
+
   constructor(name, level, n_cnt, noteData) {
     this.name = name;
     this.level = level;
@@ -12,8 +14,7 @@ export class Score {
   }
 
   calc_unit_score(talent) {
-    const weight = [1, 2, 0.1, 0.2, 0.1, 0.2, 1, 3];
-
+    const weight = Score.weight;
     const lv_fcr = 0.005 * (this.level - 5) + 1;
     const w_cnt = this.type.reduce((sum, t) => sum + weight[t - 1], 0);
     const raw_scr = 4.0 * talent * lv_fcr / w_cnt;
@@ -46,5 +47,26 @@ export class Score {
       result1: Math.floor(result1),
       result2: Math.floor(result2)
     };
+  }
+
+  calc_skill_rank() {
+    const weight = Score.weight;
+    const w_cnt_skl = Array(7).fill(0);
+
+    for (let i = 0; i < this.n_cnt; i++) {
+      w_cnt_skl[this.actskl1[i]] += weight[this.type[i] - 1];
+    }
+
+    // 1〜5番目（index 1〜5）を抽出してソートし、元の位置に順位を割り当てる
+    const sliced = w_cnt_skl.slice(1, 6);
+    const sorted = [...sliced].map((val, idx) => ({ val, idx }))
+                              .sort((a, b) => b.val - a.val);
+
+    const rank = Array(5);
+    for (let i = 0; i < sorted.length; i++) {
+      rank[sorted[i].idx] = i + 1;
+    }
+
+    return rank;
   }
 }

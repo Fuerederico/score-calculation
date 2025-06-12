@@ -26,16 +26,22 @@ if (selectedRadio) {
 }
 
 const talent = inputValues[0];
-const skill = [0].concat(inputValues.slice(1), selectedValue);
+const skill = [0].concat(inputValues.slice(1)).concat(selectedValue);
 
 const { result1, result2 } = instance.calc_max_score(talent, skill);
 document.getElementById("result").textContent = `${result1} / ${result2}`;
 
+const ranks = instance.calc_skill_rank();
+for (let i = 1; i <= 5; i++) {
+  const rankSpan = document.getElementById(`rank-${i}`);
+  if (rankSpan) {
+    rankSpan.textContent = ` (${ranks[i - 1]})`;
+  }
+}
+
 });
 
-const inputsDiv = document.getElementById("inputs"); const instance = instances[0]; const skillRanks = instance.calc_skill_rank();
-
-for (let i = 0; i < 6; i++) { const input = document.createElement("input"); input.type = "number"; input.id = input-${i}; input.placeholder = 入力${i + 1}; inputsDiv.appendChild(input);
+const inputsDiv = document.getElementById("inputs"); for (let i = 0; i < 6; i++) { const input = document.createElement("input"); input.type = "number"; input.id = input-${i}; input.placeholder = 入力${i + 1}; inputsDiv.appendChild(input);
 
 if (i > 0) {
   const radio = document.createElement("input");
@@ -45,7 +51,8 @@ if (i > 0) {
   inputsDiv.appendChild(radio);
 
   const rankSpan = document.createElement("span");
-  rankSpan.textContent = ` ← ${skillRanks[i - 1]}位`;
+  rankSpan.id = `rank-${i}`;
+  rankSpan.textContent = "";
   inputsDiv.appendChild(rankSpan);
 }
 
@@ -54,3 +61,4 @@ inputsDiv.appendChild(document.createElement("br"));
 } }
 
 initialize();
+

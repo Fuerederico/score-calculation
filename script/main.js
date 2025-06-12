@@ -1,5 +1,5 @@
 //エラーメッセージ表示
-window.onerror = function(message, source, lineno, colno, error) {
+window.onerror = function (message, source, lineno, colno, error) {
   alert(`Error: ${message}\nSource: ${source}\nLine: ${lineno}, Column: ${colno}`);
 };
 
@@ -27,29 +27,30 @@ function populateDropdown() {
 
 function setupEventListeners() {
   const calculateBtn = document.getElementById("calculate-btn");
-calculateBtn.addEventListener("click", () => {
-  const select = document.getElementById("instance-select");
-  const selectedIndex = select.value;
-  const instance = instances[selectedIndex];
+  calculateBtn.addEventListener("click", () => {
+    const select = document.getElementById("instance-select");
+    const selectedIndex = select.value;
+    const instance = instances[selectedIndex];
 
-  const inputValues = [];
-  for (let i = 0; i < 6; i++) {
-    const val = Number(document.getElementById(`input-${i}`).value) || 0;
-    inputValues.push(val);
-  }
+    const inputValues = [];
+    for (let i = 0; i < 6; i++) {
+      const val = Number(document.getElementById(`input-${i}`).value) || 0;
+      inputValues.push(val);
+    }
 
-  const total = inputValues.reduce((a, b) => a + b, 0);
+    const selectedRadio = document.querySelector('input[name="selection"]:checked');
+    let selectedValue = 0;
+    if (selectedRadio) {
+      const index = Number(selectedRadio.value);
+      selectedValue = Number(document.getElementById(`input-${index}`).value) || 0;
+    }
 
-  const selectedRadio = document.querySelector('input[name="selection"]:checked');
-  let selectedValue = 0;
-  if (selectedRadio) {
-    const index = Number(selectedRadio.value); // ラジオボタンの通し番号
-    selectedValue = Number(document.getElementById(`input-${index}`).value) || 0;
-  }
+    const talent = inputValues[0];
+    const skill = [0].concat(inputValues.slice(1), selectedValue);
 
-  const result = instance.calculate(total, selectedValue);
-  document.getElementById("result").textContent = result.toFixed(2);
-});
+    const { result1, result2 } = instance.calc_max_score(talent, skill);
+    document.getElementById("result").textContent = `${result1.toFixed(2)} / ${result2.toFixed(2)}`;
+  });
 
   const inputsDiv = document.getElementById("inputs");
   for (let i = 0; i < 6; i++) {

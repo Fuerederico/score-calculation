@@ -26,6 +26,9 @@ function populateDropdown() {
 }
 
 function setupEventListeners() {
+  let skillRanks = [];
+  skillRanks = instance.calc_skill_rank();
+  
   const calculateBtn = document.getElementById("calculate-btn");
   calculateBtn.addEventListener("click", () => {
     const select = document.getElementById("instance-select");
@@ -60,13 +63,19 @@ function setupEventListeners() {
     input.placeholder = `入力${i + 1}`;
     inputsDiv.appendChild(input);
 
-    if (i > 0) {
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = "selection";
-      radio.value = i;
-      inputsDiv.appendChild(radio);
-    }
+  // ラジオボタンを追加する部分（i > 0 の条件内）
+  if (i > 0) {
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "selection";
+    radio.value = i;
+    inputsDiv.appendChild(radio);
+
+    // 順位を表示するspan要素を追加
+    const rankSpan = document.createElement("span");
+    rankSpan.textContent = ` ← ${skillRanks[i - 1]}位`;
+    inputsDiv.appendChild(rankSpan);
+  }
 
     inputsDiv.appendChild(document.createElement("br"));
   }

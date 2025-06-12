@@ -23,6 +23,19 @@ function populateDropdown() {
     option.textContent = instance.name;
     select.appendChild(option);
   });
+
+  // 追加：インスタンス選択時に順位を表示
+  select.addEventListener("change", () => {
+    const selectedIndex = select.value;
+    const instance = instances[selectedIndex];
+    const ranks = instance.calc_skill_rank();
+    for (let i = 1; i <= 5; i++) {
+      const span = document.getElementById(`rank-${i}`);
+      if (span) {
+        span.textContent = `順位: ${ranks[i - 1]}`;
+      }
+    }
+  });
 }
 
 function setupEventListeners() {
@@ -46,18 +59,10 @@ function setupEventListeners() {
     }
 
     const talent = inputValues[0];
-    const skill = [0].concat(inputValues.slice(1)).concat(selectedValue);
+    const skill = inputValues.slice(1).concat(selectedValue);
 
-    const { result1, result2 } = instance.calc_max_score(talent, skill);
-    document.getElementById("result").textContent = `${result1} / ${result2}`;
-
-    const ranks = instance.calc_skill_rank();
-    for (let i = 1; i <= 5; i++) {
-      const rankSpan = document.getElementById(`rank-${i}`);
-      if (rankSpan) {
-        rankSpan.textContent = ` (${ranks[i - 1]})`;
-      }
-    }
+    const [result1, result2] = instance.calc_max_score(talent, skill);
+    document.getElementById("result").textContent = `${result1.toFixed(2)} / ${result2.toFixed(2)}`;
   });
 
   const inputsDiv = document.getElementById("inputs");
@@ -75,10 +80,10 @@ function setupEventListeners() {
       radio.value = i;
       inputsDiv.appendChild(radio);
 
-      const rankSpan = document.createElement("span");
-      rankSpan.id = `rank-${i}`;
-      rankSpan.textContent = "";
-      inputsDiv.appendChild(rankSpan);
+      const span = document.createElement("span");
+      span.id = `rank-${i}`;
+      span.style.marginLeft = "8px";
+      inputsDiv.appendChild(span);
     }
 
     inputsDiv.appendChild(document.createElement("br"));

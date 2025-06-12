@@ -11,20 +11,40 @@ export class Score {
     this.actskl2 = noteData.map(d => d.actskl2);
   }
 
-  /*
-  calculate(total, selectedValue) {
-    // 仮の計算式なのだ（あとで書き換えるのだ）
-    return this.noteData.reduce((sum, d) => sum + (total + selectedValue) * d.c_bns, 0);
-  }
-  */
+  calc_unit_score(talent) {
+    const weight = [1, 2, 0.1, 0.2, 0.1, 0.2, 1, 3];
 
-  calculate(total, selectedValue) {
-    // 仮の計算式なのだ（あとで書き換えるのだ）
-    let sum = 0;
+    const lv_fcr = 0.005 * (this.level - 5) + 1;
+    const w_cnt = this.type.reduce((sum, t) => sum + weight[t - 1], 0);
+    const raw_scr = 4.0 * talent * lv_fcr / w_cnt;
+
+    return this.type.map(t => raw_scr * weight[t - 1]);
+  }
+
+  calc_max_score(talent, skill) {
+    const s_bns1 = [];
+    const s_bns2 = [];
+    const u_scr = this.calc_unit_score(talent);
+
     for (let i = 0; i < this.n_cnt; i++) {
-      sum += (total + selectedValue) * this.c_bns[i];
+      s_bns1[i] = 1 + skill[this.actskl1[i]] / 100;
+      s_bns2[i] = 1 + skill[this.actskl2[i]] / 100;
     }
-    return sum;
-  }
 
+    let result1 = 0;
+    let result2 = 0;
+
+    for (let i = 0; i < this.n_cnt; i++) {
+      const partial1 = u_scr[i] * this.c_bns[i] * s_bns1[i];
+      const partial2 = u_scr[i] * this.c_bns[i] * s_bns2[i];
+
+      result1 += Math.floor(partial1 * 100) / 100;
+      result2 += Math.floor(partial2 * 100) / 100;
+    }
+
+    return {
+      result1: Math.floor(result1),
+      result2: Math.floor(result2)
+    };
+  }
 }

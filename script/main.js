@@ -1,18 +1,32 @@
-//エラーメッセージ表示
-window.onerror = function(message, source, lineno, colno, error) {
-  alert(`Error: ${message}\nSource: ${source}\nLine: ${lineno}, Column: ${colno}`);
-};
-
 import { loadInstanceA } from './instanceA.js';
+import { loadInstanceB } from './instanceB.js';
 
 const instances = [];
+
+function updateRankDisplay(instance) {
+  const ranks = instance.calc_skill_rank();
+  for (let i = 1; i <= 5; i++) {
+    const span = document.getElementById(`rank-${i}`);
+    if (span) {
+      span.textContent = `${ranks[i - 1]}`;
+    }
+  }
+}
 
 async function initialize() {
   const instanceA = await loadInstanceA();
   instances.push(instanceA);
 
+  const instanceB = await loadInstanceB();
+  instances.push(instanceB);
+
   populateDropdown();
   setupEventListeners();
+
+  const select = document.getElementById("instance-select");
+  const instance = instances[Number(select.value)] || instances[0];
+  updateRankDisplay(instance);
+
 }
 
 function populateDropdown() {
@@ -24,17 +38,11 @@ function populateDropdown() {
     select.appendChild(option);
   });
 
-  // 追加：インスタンス選択時に順位を表示
+  // インスタンス選択時に順位を表示
   select.addEventListener("change", () => {
     const selectedIndex = select.value;
     const instance = instances[selectedIndex];
-    const ranks = instance.calc_skill_rank();
-    for (let i = 1; i <= 5; i++) {
-      const span = document.getElementById(`rank-${i}`);
-      if (span) {
-        span.textContent = `順位: ${ranks[i - 1]}`;
-      }
-    }
+    updateRankDisplay(instance);
   });
 }
 
@@ -59,10 +67,12 @@ function setupEventListeners() {
     }
 
     const talent = inputValues[0];
-    const skill = inputValues.slice(1).concat(selectedValue);
+    const skill = [0].concat(inputValues.slice(1), selectedValue);
 
-    const {result1, result2} = instance.calc_max_score(talent, skill);
-    document.getElementById("result").textContent = `${result1.toFixed(2)} / ${result2.toFixed(2)}`;
+    const { result1, result2 } = instance.calc_max_score(talent, skill);
+    document.getElementById("result").innerHTML =
+      `<pre style="font-size: 18px;">MAX: ${Math.floor(result1)}\nMIN: ${Math.floor(result2)}</pre>`;
+
   });
 
   const inputsDiv = document.getElementById("inputs");
@@ -70,7 +80,8 @@ function setupEventListeners() {
     const input = document.createElement("input");
     input.type = "number";
     input.id = `input-${i}`;
-    input.placeholder = `入力${i + 1}`;
+    const placeholders = ["総合力", "スキル1", "スキル2", "スキル3", "スキル4", "スキル5"];
+    input.placeholder = placeholders[i];    
     inputsDiv.appendChild(input);
 
     if (i > 0) {
@@ -88,6 +99,14 @@ function setupEventListeners() {
 
     inputsDiv.appendChild(document.createElement("br"));
   }
+
+  const select = document.getElementById("instance-select");
+  select.addEventListener("change", () => {
+    const selectedIndex = select.value;
+    const instance = instances[selectedIndex];
+    updateRankDisplay(instance);
+  });
 }
+
 
 initialize();

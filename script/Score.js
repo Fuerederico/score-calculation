@@ -57,13 +57,11 @@ export class Score {
       w_cnt_skl[this.actskl1[i]] += weight[this.type[i] - 1];
     }
 
-    // 1〜5番目（index 1〜5）を抽出してソートし、元の位置に順位を割り当てる
     const sliced = w_cnt_skl.slice(1, 6);
-    const sorted = [...sliced].map((val, idx) => ({ val, idx }))
-                              .sort((a, b) => b.val - a.val);
+    const sorted = [...sliced].map((val, idx) => ({ val, idx })).sort((a, b) => b.val - a.val);
 
     const rank = Array(5);
-    for (let i = 0; i < sorted.length; i++) {
+    for (let i = 0; i < 5; i++) {
       rank[sorted[i].idx] = i + 1;
     }
 

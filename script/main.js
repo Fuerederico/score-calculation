@@ -1,7 +1,5 @@
-import { loadInstanceA } from './instanceA.js';
-import { loadInstanceB } from './instanceB.js';
-
 const instances = [];
+const scoreIDs = ["0593", "1195"]; // 譜面IDのリスト
 
 function updateRankDisplay(instance) {
   const ranks = instance.calc_skill_rank();
@@ -14,11 +12,11 @@ function updateRankDisplay(instance) {
 }
 
 async function initialize() {
-  const instanceA = await loadInstanceA();
-  instances.push(instanceA);
-
-  const instanceB = await loadInstanceB();
-  instances.push(instanceB);
+  for (const name of scoreIDs) {
+    const module = await import(`./score_${name}.js`);
+    const instance = await module.loadScore(); // 関数名固定
+    instances.push(instance);
+  }
 
   populateDropdown();
   setupEventListeners();
@@ -81,23 +79,35 @@ function setupEventListeners() {
     input.type = "number";
     input.id = `input-${i}`;
     const placeholders = ["総合力", "スキル1", "スキル2", "スキル3", "スキル4", "スキル5"];
-    input.placeholder = placeholders[i];    
-    inputsDiv.appendChild(input);
+    input.placeholder = placeholders[i];
+    if (i === 0) {
+      input.style.width = "121px";
+    } else {
+      input.style.width = "100px";
+    }
+
+    const line = document.createElement("div");  // 1行をまとめるブロック
+    line.style.display = "flex";
+    line.style.alignItems = "center";
 
     if (i > 0) {
       const radio = document.createElement("input");
       radio.type = "radio";
       radio.name = "selection";
       radio.value = i;
-      inputsDiv.appendChild(radio);
 
       const span = document.createElement("span");
       span.id = `rank-${i}`;
       span.style.marginLeft = "8px";
-      inputsDiv.appendChild(span);
+
+      line.appendChild(radio);   // 左側にラジオボタン
+      line.appendChild(input);   // 右に入力ボックス
+      line.appendChild(span);    // 順位表示
+    } else {
+      line.appendChild(input);   // 入力1にはラジオも順位も不要
     }
 
-    inputsDiv.appendChild(document.createElement("br"));
+    inputsDiv.appendChild(line);
   }
 
   const select = document.getElementById("instance-select");

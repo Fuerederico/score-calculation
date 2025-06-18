@@ -1,10 +1,9 @@
 export class Score {
   static weight = [1, 2, 0.1, 0.2, 0.1, 0.2, 1, 3];
 
-  constructor(name, level, n_cnt, noteData) {
+  constructor(name, level, noteData) {
     this.name = name;
     this.level = level;
-    this.n_cnt = n_cnt;
     this.noteData = noteData;
 
     this.type = noteData.map(d => d.type);
@@ -25,9 +24,10 @@ export class Score {
   calc_max_score(talent, skill) {
     const s_bns1 = [];
     const s_bns2 = [];
+    const n_cnt = this.type.length;
     const u_scr = this.calc_unit_score(talent);
 
-    for (let i = 0; i < this.n_cnt; i++) {
+    for (let i = 0; i < n_cnt; i++) {
       s_bns1[i] = 1 + skill[this.actskl1[i]] / 100;
       s_bns2[i] = 1 + skill[this.actskl2[i]] / 100;
     }
@@ -35,7 +35,7 @@ export class Score {
     let result1 = 0;
     let result2 = 0;
 
-    for (let i = 0; i < this.n_cnt; i++) {
+    for (let i = 0; i < n_cnt; i++) {
       const partial1 = u_scr[i] * this.c_bns[i] * s_bns1[i];
       const partial2 = u_scr[i] * this.c_bns[i] * s_bns2[i];
 
@@ -51,9 +51,10 @@ export class Score {
 
   calc_skill_rank() {
     const weight = Score.weight;
+    const n_cnt = this.type.length;
     const w_cnt_skl = Array(7).fill(0);
 
-    for (let i = 0; i < this.n_cnt; i++) {
+    for (let i = 0; i < n_cnt; i++) {
       w_cnt_skl[this.actskl1[i]] += weight[this.type[i] - 1];
     }
 

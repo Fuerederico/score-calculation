@@ -69,45 +69,36 @@ function setupEventListeners() {
 
     const { result1, result2 } = instance.calc_max_score(talent, skill);
     document.getElementById("result").innerHTML =
-      `<pre style="font-size: 18px;">MAX: ${Math.floor(result1)}\nMIN: ${Math.floor(result2)}</pre>`;
+      `<pre style="font-size: 20px;">MAX: ${Math.floor(result1)}\nMIN: ${Math.floor(result2)}</pre>`;
 
   });
 
   const inputsDiv = document.getElementById("inputs");
   for (let i = 0; i < 6; i++) {
-    const input = document.createElement("input");
-    input.type = "number";
-    input.id = `input-${i}`;
-    const placeholders = ["総合力", "スキル1", "スキル2", "スキル3", "スキル4", "スキル5"];
-    input.placeholder = placeholders[i];
-    if (i === 0) {
-      input.style.width = "121px";
-    } else {
-      input.style.width = "100px";
-    }
-
-    const line = document.createElement("div");  // 1行をまとめるブロック
-    line.style.display = "flex";
-    line.style.alignItems = "center";
+    const row = document.createElement("div");
+    row.className = "input-row";
 
     if (i > 0) {
       const radio = document.createElement("input");
       radio.type = "radio";
       radio.name = "selection";
       radio.value = i;
-
-      const span = document.createElement("span");
-      span.id = `rank-${i}`;
-      span.style.marginLeft = "8px";
-
-      line.appendChild(radio);   // 左側にラジオボタン
-      line.appendChild(input);   // 右に入力ボックス
-      line.appendChild(span);    // 順位表示
-    } else {
-      line.appendChild(input);   // 入力1にはラジオも順位も不要
+      row.appendChild(radio);
     }
 
-    inputsDiv.appendChild(line);
+    const input = document.createElement("input");
+    input.type = "number";
+    input.id = `input-${i}`;
+    input.placeholder = i === 0 ? "総合力" : `スキル${i}`;
+    row.appendChild(input);
+
+    if (i > 0) {
+      const span = document.createElement("span");
+      span.id = `rank-${i}`;
+      row.appendChild(span);
+    }
+
+    inputsDiv.appendChild(row);
   }
 
   const select = document.getElementById("instance-select");

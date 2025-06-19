@@ -2,12 +2,19 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>スコア計算ツール</title>
 </head>
 <style>
 body {
   font-family: sans-serif;
   padding: 16px;
+}
+
+select {
+  font-size: 1.1rem;
+  padding: 6px 10px;
+  min-width: 200px;
 }
 
 input, select, button {
@@ -19,7 +26,8 @@ input, select, button {
 #calculate-btn {
   background-color: #4CAF50;
   color: rgb(255, 255, 255);
-  padding: 8px 16px;
+  font-size: 16px;
+  padding: 8px 18px;
   border: none;
   border-radius: 4px;
 }
@@ -30,21 +38,42 @@ p#result {
   line-height: 1.4;
 }
 
-@media (max-width: 600px) {
-  input {
-    width: 100%;
+input[type="number"] {
+  width: 100%;
+  max-width: 200px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  padding: 4px 6px;
+}
+
+/* スマホ表示用の調整 */
+@media screen and (max-width: 600px) {
+  input[type="number"] {
+    max-width: 100%;
+    font-size: 1.1rem;
+  }
+
+  #result {
+    font-size: 1.2rem;
   }
 }
 
 input[type="radio"] {
+  transform: scale(1.4);
   margin-right: 8px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* 要素間のスペース */
+  margin-bottom: 8px;
 }
 
 </style>
 <body>
-  <h2>スコア計算ツール</h2>
+  <h2>プロセカ スコア計算ツール</h2>
 
-  <label for="instance-select">譜面:</label>
   <select id="instance-select"></select>
 
   <p></p>
@@ -106,7 +135,7 @@ input[type="radio"] {
 
   <h3>更新履歴</h3>
   <ul>
-    2025/06/18 公開
+    2025/06/20 公開
   </ul>
 </body>
 </html>

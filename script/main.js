@@ -1,5 +1,5 @@
 const instances = [];
-const scoreIDs = ["0593", "1195"]; // 譜面IDのリスト
+const scoreIDs = ["0593", "1195"]; // 譜面追加時に記入
 
 function updateRankDisplay(instance) {
   const ranks = instance.calc_skill_rank();
@@ -14,7 +14,7 @@ function updateRankDisplay(instance) {
 async function initialize() {
   for (const name of scoreIDs) {
     const module = await import(`./score_${name}.js`);
-    const instance = await module.loadScore(); // 関数名固定
+    const instance = await module.loadScore();
     instances.push(instance);
   }
 
@@ -24,7 +24,6 @@ async function initialize() {
   const select = document.getElementById("instance-select");
   const instance = instances[Number(select.value)] || instances[0];
   updateRankDisplay(instance);
-
 }
 
 function populateDropdown() {
@@ -36,7 +35,6 @@ function populateDropdown() {
     select.appendChild(option);
   });
 
-  // インスタンス選択時に順位を表示
   select.addEventListener("change", () => {
     const selectedIndex = select.value;
     const instance = instances[selectedIndex];
@@ -108,6 +106,5 @@ function setupEventListeners() {
     updateRankDisplay(instance);
   });
 }
-
 
 initialize();

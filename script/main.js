@@ -1,5 +1,5 @@
 const instances = [];
-const scoreIDs = ["0593", "1195"]; // 譜面追加時に記入
+const scoreIDs = ["0593", "1195", "6144"]; // 譜面追加時に記入
 
 function updateRankDisplay(instance) {
   const ranks = instance.calc_skill_rank();
